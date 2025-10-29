@@ -39,11 +39,27 @@ public class RobotDrive extends LinearOpMode {
             robot.driveRobot(Forward, Rotation, Strafe);
 
             if( gamepad1.xButtonWasPressed) {
-                robot.spinLaunch("On")
+                robot.spinLaunch("On");
             }
             
             if( gamepad1.xButtonWasReleased) {
-                robot.spinLaunch("Off")
+                robot.spinLaunch("Off");
+            }
+
+            if( gamepad1.yButtonWasReleased) {
+                robot.flipperToggle("On");
+            }
+
+            if( gamepad1.yButtonWasReleased) {
+                robot.flipperToggle("Off");
+            }
+
+            if( gamepad1.dpad_leftWasReleased) {
+                robot.expellFeeder();
+            }
+
+            if( gamepad1.dpad_rightWasReleased) {
+                robot.launchFeeder();
             }
             
             // Show the elapsed game time and wheel power.
