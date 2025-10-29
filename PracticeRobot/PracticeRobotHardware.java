@@ -21,8 +21,15 @@ public class PracticeRobotHardware {
     private DcMotor launchLeft = null;
     private DcMotot launchRight = null;
 
-    // Define Drive constants.  Make them public so they CAN be used by the calling OpMode
+    private Servo frontPassthrough = null;
+    private Servo backPassthrough = null;
 
+    private Servo flipper = null;
+
+    // Define Drive constants.  Make them public so they CAN be used by the calling OpMode
+    public static final double flipperPos = 0.5 ;
+    public static final double backPos = 0.5 ;
+    public static final double frontPos = 0.5 ;
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public PracticeRobotHardware (LinearOpMode opmode) {
@@ -45,6 +52,11 @@ public class PracticeRobotHardware {
         launchLeft = myOpmode.hardwareMap.get(DcMotor.class, "launch_left");
         launchRight = myOpmode.hardwareMap.get(DcMotor.class, "launch_right");
 
+        frontPassthough = myOpmode.hardwareMap.get(Servo.class, "front_passthrough");
+        backPassthough = myOpmode.hardwareMap.get(Servo.class, "back_passthrough");
+
+        flipper = myOpmode.hardwareMap.get(Servo.class, "flipper");
+
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -55,6 +67,10 @@ public class PracticeRobotHardware {
 
         launchLeft.setDirection(DcMotor.Direction.REVERSED);
         launchRight.setDirection(DcMotor.Direction.FORWARD);
+
+        flipper.setPosition(flipperPos);
+        frontPassthrough.setPosition(frontPos);
+        backPassthrough.setPosition(backPos);
 
         myOpMode.telemetry.addData(">", "Hardware Initialized");
         myOpMode.telemetry.update();
@@ -109,6 +125,40 @@ public class PracticeRobotHardware {
     }   
 
 
+
+    public void flipperToggle() {
+        switch(Power) {
+            case "On":
+                flipper.setPosition(0.5);
+                break;
+            case "Off":
+                flipper.setPosition(0.0);
+                break;
+        }
+    }
+
+    public void launchFeeder(){
+        frontPassthrough.setPosition(0.25); //backward movement
+        backPassthrough.setPosition(0);
+        wait(500); //buffer
+        frontPassthrough.setPosition(1); //push
+        wait(500); //buffer
+        frontPassthrough.setPosition(frontPos); //back to start
+        backPassthrough.setPosition(backPos);
+    }
+
+    public void expellFeeder(){
+        frontPassthrough.setPosition(0.25); //backward movement
+        backPassthrough.setPosition(0);
+        wait(500); //buffer
+        frontPassthrough.setPosition(1); //push
+        wait(500); //buffer
+        frontPassthrough.setPosition(frontPos); //back to start
+        backPassthrough.setPosition(backPos);
+    }
+
+
+                
     // public void spinLaunch() {
     //     switch(Power) {
     //         case "On":
